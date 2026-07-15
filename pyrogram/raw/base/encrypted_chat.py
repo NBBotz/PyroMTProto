@@ -1,0 +1,52 @@
+#  PyroMTProto - Telegram MTProto API Client Library for Python
+#  Copyright (C) 2024-present PyroMTProto Contributors
+#  Licensed under the GNU Lesser General Public License v3.0
+
+from typing import TYPE_CHECKING, Union
+from pyrogram import raw
+from pyrogram.raw.core import BaseTypeMeta
+
+
+if TYPE_CHECKING:
+    EncryptedChat = Union[raw.types.EncryptedChat, raw.types.EncryptedChatDiscarded, raw.types.EncryptedChatEmpty, raw.types.EncryptedChatRequested, raw.types.EncryptedChatWaiting]
+else:
+    # noinspection PyRedeclaration
+    class EncryptedChat(metaclass=BaseTypeMeta):  # type: ignore
+        """Telegram API base type.
+
+    Constructors:
+        This base type has 5 constructors available.
+
+        .. currentmodule:: pyrogram.raw.types
+
+        .. autosummary::
+            :nosignatures:
+
+            EncryptedChat
+            EncryptedChatDiscarded
+            EncryptedChatEmpty
+            EncryptedChatRequested
+            EncryptedChatWaiting
+
+    Functions:
+        This object can be returned by 2 functions.
+
+        .. currentmodule:: pyrogram.raw.functions
+
+        .. autosummary::
+            :nosignatures:
+
+            messages.RequestEncryption
+            messages.AcceptEncryption
+        """
+
+        QUALNAME = "pyrogram.raw.base.EncryptedChat"
+        __union_types__ = Union[raw.types.EncryptedChat, raw.types.EncryptedChatDiscarded, raw.types.EncryptedChatEmpty, raw.types.EncryptedChatRequested, raw.types.EncryptedChatWaiting]
+
+        def __init__(self):
+            raise TypeError(
+                "Base types can only be used for type checking purposes: "
+                "you tried to use a base type instance as argument, "
+                "but you need to instantiate one of its constructors instead. "
+                "More info: https://telegramplayground.github.io/pyrogram/telegram/base/encrypted-chat"
+            )

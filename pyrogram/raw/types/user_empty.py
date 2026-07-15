@@ -1,0 +1,77 @@
+#  PyroMTProto - Telegram MTProto API Client Library for Python
+#  Copyright (C) 2024-present PyroMTProto Contributors
+#  Licensed under the GNU Lesser General Public License v3.0
+
+from io import BytesIO
+from typing import TYPE_CHECKING, Optional, Any
+
+from pyrogram.raw.core.primitives import Int, Long, Int128, Int256, Bool, Bytes, String, Double, Vector
+from pyrogram.raw.core import TLObject
+
+if TYPE_CHECKING:
+    from pyrogram import raw
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+#               !!! WARNING !!!               #
+#          This is a generated file!          #
+# All changes made in this file will be lost! #
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+
+class UserEmpty(TLObject):
+    """Telegram API type.
+
+    Constructor of :obj:`~pyrogram.raw.base.User`.
+
+    Details:
+        - Layer: ``227``
+        - ID: ``D3BC4B7A``
+
+    Parameters:
+        id (``int`` ``64-bit``):
+            N/A
+
+    Functions:
+        This object can be returned by 9 functions.
+
+        .. currentmodule:: pyrogram.raw.functions
+
+        .. autosummary::
+            :nosignatures:
+
+            account.UpdateProfile
+            account.UpdateUsername
+            account.ChangePhone
+            users.GetUsers
+            contacts.ImportContactToken
+            messages.GetFutureChatCreatorAfterLeave
+            channels.GetMessageAuthor
+            bots.GetAdminedBots
+            bots.CreateBot
+    """
+
+    __slots__: list[str] = ["id"]
+
+    ID = 0xd3bc4b7a
+    QUALNAME = "types.UserEmpty"
+
+    def __init__(self, *, id: int) -> None:
+        self.id = id  # long
+
+    @staticmethod
+    def read(b: BytesIO, *args: Any) -> "UserEmpty":
+        # No flags
+        
+        id = Long.read(b)
+        
+        return UserEmpty(id=id)
+
+    def write(self, *args) -> bytes:
+        b = BytesIO()
+        b.write(Int(self.ID, False))
+
+        # No flags
+        
+        b.write(Long(self.id))
+        
+        return b.getvalue()

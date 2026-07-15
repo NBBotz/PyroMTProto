@@ -1,0 +1,71 @@
+#  PyroMTProto - Telegram MTProto API Client Library for Python
+#  Copyright (C) 2024-present PyroMTProto Contributors
+#  Licensed under the GNU Lesser General Public License v3.0
+
+from typing import Union
+
+import pyrogram
+from pyrogram import types, utils, raw
+
+
+class ReopenForumTopic:
+    async def reopen_forum_topic(
+        self: "pyrogram.Client",
+        chat_id: Union[int, str],
+        message_thread_id: int
+    ) -> "types.Message":
+        """Use this method to reopen a closed topic in a forum supergroup chat.
+        The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
+
+        .. include:: /_includes/usable-by/users-bots.rst
+
+        Parameters:
+            chat_id (``int`` | ``str``):
+                Unique identifier (int) or username (str) of the target chat.
+                For your personal cloud (Saved Messages) you can simply use "me" or "self".
+                For a contact that exists in your Telegram address book you can use his phone number (str).
+
+            message_thread_id (``int``):
+                Unique identifier for the target message thread of the forum topic
+
+        Returns:
+            :obj:`~pyrogram.types.Message`: On success, the edited message is returned.
+
+        Example:
+            .. code-block:: python
+
+                # Create a new Topic
+                message = await app.create_forum_topic(chat, "Topic Title")
+                # Close the Topic
+                await app.close_forum_topic(chat, message.id)
+                # Reopen the closed Topic
+                await app.reopen_forum_topic(chat, message.id)
+        """
+
+        r = await self.invoke(
+            raw.functions.messages.EditForumTopic(
+                peer=await self.resolve_peer(chat_id),
+                topic_id=message_thread_id,
+                closed=False
+            )
+        )
+
+        for i in r.updates:
+            if isinstance(
+                i,
+                (
+                    raw.types.UpdateEditMessage,
+                    raw.types.UpdateEditChannelMessage,
+                    raw.types.UpdateNewMessage,
+                    raw.types.UpdateNewChannelMessage,
+                    raw.types.UpdateNewScheduledMessage
+                )
+            ):
+                return await types.Message._parse(
+                    self,
+                    i.message,
+                    {i.id: i for i in r.users},
+                    {i.id: i for i in r.chats},
+                    is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
+                    replies=self.fetch_replies
+                )

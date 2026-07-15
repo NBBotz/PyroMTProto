@@ -1,0 +1,100 @@
+#  PyroMTProto - Telegram MTProto API Client Library for Python
+#  Copyright (C) 2024-present PyroMTProto Contributors
+#  Licensed under the GNU Lesser General Public License v3.0
+
+from datetime import datetime
+
+import pyrogram
+from pyrogram import raw, types, utils
+from pyrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType, ThumbnailSource
+from ..object import Object
+
+
+class VideoQuality(Object):
+    """Describes a video file of a specific quality.
+
+    Parameters:
+        file_id (``str``):
+            Identifier for this file, which can be used to download or reuse the file.
+
+        file_unique_id (``str``):
+            Unique identifier for this file, which is supposed to be the same over time and for different accounts.
+            Can't be used to download or reuse the file.
+
+        width (``int``):
+            Video width as defined by sender.
+
+        height (``int``):
+            Video height as defined by sender.
+
+        codec (``str``):
+            Codec used for video file encoding, for example, "h264", "h265", or "av1".
+
+        file_size (``int``, *optional*):
+            File size.
+
+        supports_streaming (``bool``, *optional*):
+            True, if the video was uploaded with streaming support.
+
+        date (:py:obj:`~datetime.datetime`, *optional*):
+            Date the video was sent.
+
+        thumbs (List of :obj:`~pyrogram.types.Thumbnail`, *optional*):
+            Video thumbnails.
+
+    """
+
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.Client" = None,
+        file_id: str,
+        file_unique_id: str,
+        width: int,
+        height: int,
+        codec: str,
+        file_size: int = None,
+        supports_streaming: bool = None,
+        date: datetime = None,
+        thumbs: list["types.Thumbnail"] = None
+    ):
+        super().__init__(client)
+
+        self.file_id = file_id
+        self.file_unique_id = file_unique_id
+        self.width = width
+        self.height = height
+        self.codec = codec
+        self.file_size = file_size
+        self.supports_streaming = supports_streaming
+        self.date = date
+        self.thumbs = thumbs
+
+    @staticmethod
+    def _parse(
+        client,
+        video: "raw.types.Document",
+        video_attributes: "raw.types.DocumentAttributeVideo",
+        file_name: str
+    ) -> "VideoQuality":
+        return VideoQuality(
+            file_id=FileId(
+                file_type=FileType.VIDEO,
+                dc_id=video.dc_id,
+                media_id=video.id,
+                access_hash=video.access_hash,
+                file_reference=video.file_reference
+            ).encode() if video else None,
+            file_unique_id=FileUniqueId(
+                file_unique_type=FileUniqueType.DOCUMENT,
+                media_id=video.id
+            ).encode() if video else None,
+            width=video_attributes.w if video_attributes else None,
+            height=video_attributes.h if video_attributes else None,
+            codec=video_attributes.video_codec if video_attributes else None,
+            file_size=video.size if video else None,
+            supports_streaming=video_attributes.supports_streaming if video_attributes else None,
+            date=utils.timestamp_to_datetime(video.date) if video else None,
+            thumbs=types.Thumbnail._parse(client, video) if video else None,
+            client=client
+        )

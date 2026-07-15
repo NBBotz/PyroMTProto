@@ -1,0 +1,68 @@
+#  PyroMTProto - Telegram MTProto API Client Library for Python
+#  Copyright (C) 2024-present PyroMTProto Contributors
+#  Licensed under the GNU Lesser General Public License v3.0
+
+from io import BytesIO
+from typing import TYPE_CHECKING, Optional, Any
+
+from pyrogram.raw.core.primitives import Int, Long, Int128, Int256, Bool, Bytes, String, Double, Vector
+from pyrogram.raw.core import TLObject
+
+if TYPE_CHECKING:
+    from pyrogram import raw
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+#               !!! WARNING !!!               #
+#          This is a generated file!          #
+# All changes made in this file will be lost! #
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+
+class PopularContact(TLObject):
+    """Telegram API type.
+
+    Constructor of :obj:`~pyrogram.raw.base.PopularContact`.
+
+    Details:
+        - Layer: ``227``
+        - ID: ``5CE14175``
+
+    Parameters:
+        client_id (``int`` ``64-bit``):
+            N/A
+
+        importers (``int`` ``32-bit``):
+            N/A
+
+    """
+
+    __slots__: list[str] = ["client_id", "importers"]
+
+    ID = 0x5ce14175
+    QUALNAME = "types.PopularContact"
+
+    def __init__(self, *, client_id: int, importers: int) -> None:
+        self.client_id = client_id  # long
+        self.importers = importers  # int
+
+    @staticmethod
+    def read(b: BytesIO, *args: Any) -> "PopularContact":
+        # No flags
+        
+        client_id = Long.read(b)
+        
+        importers = Int.read(b)
+        
+        return PopularContact(client_id=client_id, importers=importers)
+
+    def write(self, *args) -> bytes:
+        b = BytesIO()
+        b.write(Int(self.ID, False))
+
+        # No flags
+        
+        b.write(Long(self.client_id))
+        
+        b.write(Int(self.importers))
+        
+        return b.getvalue()

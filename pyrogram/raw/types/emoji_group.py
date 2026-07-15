@@ -1,0 +1,76 @@
+#  PyroMTProto - Telegram MTProto API Client Library for Python
+#  Copyright (C) 2024-present PyroMTProto Contributors
+#  Licensed under the GNU Lesser General Public License v3.0
+
+from io import BytesIO
+from typing import TYPE_CHECKING, Optional, Any
+
+from pyrogram.raw.core.primitives import Int, Long, Int128, Int256, Bool, Bytes, String, Double, Vector
+from pyrogram.raw.core import TLObject
+
+if TYPE_CHECKING:
+    from pyrogram import raw
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+#               !!! WARNING !!!               #
+#          This is a generated file!          #
+# All changes made in this file will be lost! #
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+
+class EmojiGroup(TLObject):
+    """Telegram API type.
+
+    Constructor of :obj:`~pyrogram.raw.base.EmojiGroup`.
+
+    Details:
+        - Layer: ``227``
+        - ID: ``7A9ABDA9``
+
+    Parameters:
+        title (``str``):
+            N/A
+
+        icon_emoji_id (``int`` ``64-bit``):
+            N/A
+
+        emoticons (List of ``str``):
+            N/A
+
+    """
+
+    __slots__: list[str] = ["title", "icon_emoji_id", "emoticons"]
+
+    ID = 0x7a9abda9
+    QUALNAME = "types.EmojiGroup"
+
+    def __init__(self, *, title: str, icon_emoji_id: int, emoticons: list[str]) -> None:
+        self.title = title  # string
+        self.icon_emoji_id = icon_emoji_id  # long
+        self.emoticons = emoticons  # Vector<string>
+
+    @staticmethod
+    def read(b: BytesIO, *args: Any) -> "EmojiGroup":
+        # No flags
+        
+        title = String.read(b)
+        
+        icon_emoji_id = Long.read(b)
+        
+        emoticons = TLObject.read(b, String)
+        
+        return EmojiGroup(title=title, icon_emoji_id=icon_emoji_id, emoticons=emoticons)
+
+    def write(self, *args) -> bytes:
+        b = BytesIO()
+        b.write(Int(self.ID, False))
+
+        # No flags
+        
+        b.write(String(self.title))
+        
+        b.write(Long(self.icon_emoji_id))
+        
+        b.write(Vector(self.emoticons, String))
+        
+        return b.getvalue()

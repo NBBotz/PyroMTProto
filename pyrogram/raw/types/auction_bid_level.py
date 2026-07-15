@@ -1,0 +1,76 @@
+#  PyroMTProto - Telegram MTProto API Client Library for Python
+#  Copyright (C) 2024-present PyroMTProto Contributors
+#  Licensed under the GNU Lesser General Public License v3.0
+
+from io import BytesIO
+from typing import TYPE_CHECKING, Optional, Any
+
+from pyrogram.raw.core.primitives import Int, Long, Int128, Int256, Bool, Bytes, String, Double, Vector
+from pyrogram.raw.core import TLObject
+
+if TYPE_CHECKING:
+    from pyrogram import raw
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+#               !!! WARNING !!!               #
+#          This is a generated file!          #
+# All changes made in this file will be lost! #
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+
+class AuctionBidLevel(TLObject):
+    """Telegram API type.
+
+    Constructor of :obj:`~pyrogram.raw.base.AuctionBidLevel`.
+
+    Details:
+        - Layer: ``227``
+        - ID: ``310240CC``
+
+    Parameters:
+        pos (``int`` ``32-bit``):
+            N/A
+
+        amount (``int`` ``64-bit``):
+            N/A
+
+        date (``int`` ``32-bit``):
+            N/A
+
+    """
+
+    __slots__: list[str] = ["pos", "amount", "date"]
+
+    ID = 0x310240cc
+    QUALNAME = "types.AuctionBidLevel"
+
+    def __init__(self, *, pos: int, amount: int, date: int) -> None:
+        self.pos = pos  # int
+        self.amount = amount  # long
+        self.date = date  # int
+
+    @staticmethod
+    def read(b: BytesIO, *args: Any) -> "AuctionBidLevel":
+        # No flags
+        
+        pos = Int.read(b)
+        
+        amount = Long.read(b)
+        
+        date = Int.read(b)
+        
+        return AuctionBidLevel(pos=pos, amount=amount, date=date)
+
+    def write(self, *args) -> bytes:
+        b = BytesIO()
+        b.write(Int(self.ID, False))
+
+        # No flags
+        
+        b.write(Int(self.pos))
+        
+        b.write(Long(self.amount))
+        
+        b.write(Int(self.date))
+        
+        return b.getvalue()
